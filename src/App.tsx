@@ -25,6 +25,7 @@ const SearchWithPagination = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(5);
+  const [isDarkMode, setIsDarkMode] = useState(true); // State for dark mode
 
   useEffect(() => {
     fetchQuestions();
@@ -47,7 +48,7 @@ const SearchWithPagination = () => {
     setPage(1);
   };
 
-  const handleLimitChange = (value: any) => {
+  const handleLimitChange = (value) => {
     setLimit(Number(value));
     setPage(1);
   };
@@ -67,12 +68,36 @@ const SearchWithPagination = () => {
     );
   };
 
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+
   return (
-    <div className="p-6 min-h-screen bg-black text-white space-y-6">
+    <div
+      className={`p-6 min-h-screen transition-all ${
+        isDarkMode ? "bg-black text-white" : "bg-white text-black"
+      }`}
+    >
+      {/* Toggle Button */}
+      <div className="flex justify-end mb-4">
+        <Button
+          onClick={toggleTheme}
+          className={`${
+            isDarkMode
+              ? "bg-gray-700 text-white hover:bg-gray-600"
+              : "bg-gray-200 text-black hover:bg-gray-300"
+          }`}
+        >
+          {isDarkMode ? "Light Mode" : "Dark Mode"}
+        </Button>
+      </div>
+
       {/* Search and Filters */}
-      <Card className="p-4 bg-gray-800 shadow-lg">
+      <Card
+        className={`p-4 ${
+          isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-black"
+        } shadow-lg`}
+      >
         <CardHeader>
-          <h2 className="text-lg font-semibold text-white">Search Questions</h2>
+          <h2 className="text-lg font-semibold">Search Questions</h2>
         </CardHeader>
         <CardContent className="flex flex-col sm:flex-row gap-4 items-center">
           <Input
@@ -80,13 +105,25 @@ const SearchWithPagination = () => {
             placeholder="Search questions..."
             value={search}
             onChange={handleSearchChange}
-            className="w-full sm:flex-1 bg-gray-900 text-white border-gray-700 focus:ring-blue-500"
+            className={`w-full sm:flex-1 ${
+              isDarkMode
+                ? "bg-gray-900 text-white border-gray-700 focus:ring-blue-500"
+                : "bg-white text-black border-gray-300 focus:ring-blue-500"
+            }`}
           />
           <Select value={limit.toString()} onValueChange={handleLimitChange}>
-            <SelectTrigger className="w-28 bg-gray-900 text-white border-gray-700 focus:ring-blue-500">
+            <SelectTrigger
+              className={`w-28 ${
+                isDarkMode
+                  ? "bg-gray-900 text-white border-gray-700 focus:ring-blue-500"
+                  : "bg-white text-black border-gray-300 focus:ring-blue-500"
+              }`}
+            >
               {limit} per page
             </SelectTrigger>
-            <SelectContent className="bg-gray-800 text-white">
+            <SelectContent
+              className={isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100"}
+            >
               <SelectItem value="5">5</SelectItem>
               <SelectItem value="10">10</SelectItem>
               <SelectItem value="15">15</SelectItem>
@@ -96,16 +133,24 @@ const SearchWithPagination = () => {
       </Card>
 
       {/* Table for Data */}
-      <Card className="p-4 bg-gray-900 shadow-md">
+      <Card
+        className={`p-4 ${
+          isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
+        } shadow-md`}
+      >
         <CardHeader>
-          <h2 className="text-lg font-semibold text-white">
-            Questions List
-          </h2>
+          <h2 className="text-lg font-semibold">Questions List</h2>
         </CardHeader>
         <CardContent>
           <Table className="w-full text-left border-collapse">
             <TableHeader>
-              <TableRow className="bg-gray-800 text-white">
+              <TableRow
+                className={
+                  isDarkMode
+                    ? "bg-gray-800 text-white"
+                    : "bg-gray-300 text-black"
+                }
+              >
                 <TableHead className="py-3">Title</TableHead>
                 <TableHead className="py-3">Type</TableHead>
               </TableRow>
@@ -115,22 +160,28 @@ const SearchWithPagination = () => {
                 questions.map((q, index) => (
                   <TableRow
                     key={index}
-                    className={`hover:bg-gray-700 ${q.type === "easy"
-                      ? "bg-gray-100 text-black"
-                      : q.type === "medium"
-                        ? "bg-gray-200 text-black"
-                        : "bg-gray-300 text-black"
-                      }`}
+                    className={`hover:${
+                      isDarkMode
+                        ? "bg-gray-700 text-white"
+                        : "bg-gray-200 text-black"
+                    }`}
                   >
                     <TableCell>{highlightText(q.title)}</TableCell>
                     <TableCell>
                       <Badge
-                        className={`${q.type === "easy"
-                          ? "bg-gray-100 text-gray-800"
-                          : q.type === "medium"
-                            ? "bg-gray-200 text-gray-800"
-                            : "bg-gray-300 text-gray-800"
-                          } shadow-md`}
+                        className={`${
+                          q.type === "easy"
+                            ? isDarkMode
+                              ? "bg-gray-100 text-gray-800"
+                              : "bg-blue-100 text-blue-800"
+                            : q.type === "medium"
+                            ? isDarkMode
+                              ? "bg-gray-200 text-gray-800"
+                              : "bg-yellow-100 text-yellow-800"
+                            : isDarkMode
+                            ? "bg-gray-300 text-gray-800"
+                            : "bg-red-100 text-red-800"
+                        } shadow-md`}
                       >
                         {q.type}
                       </Badge>
@@ -158,7 +209,7 @@ const SearchWithPagination = () => {
         >
           Previous
         </Button>
-        <span className="text-gray-400">
+        <span className={isDarkMode ? "text-gray-400" : "text-gray-600"}>
           Page {page} of {Math.ceil(totalPages / limit)}
         </span>
         <Button
