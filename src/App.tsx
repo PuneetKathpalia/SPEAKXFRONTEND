@@ -19,13 +19,20 @@ import {
 import { Card, CardHeader, CardContent } from "./components/ui/card";
 import { Badge } from "./components/ui/badge";
 
+// Define the type for a question
+type Question = {
+  title: string;
+  type: "easy" | "medium" | "hard";
+};
+
+// Component
 const SearchWithPagination = () => {
-  const [questions, setQuestions] = useState([]);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [limit, setLimit] = useState(5);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(5);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
 
   useEffect(() => {
     fetchQuestions();
@@ -37,23 +44,23 @@ const SearchWithPagination = () => {
         params: { page, limit, search },
       });
       setQuestions(response.data.questions || []);
-      setTotalPages(response.data.total);
+      setTotalPages(response.data.total || 0);
     } catch (error) {
       console.error("Error fetching questions:", error);
     }
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     setPage(1);
   };
 
-  const handleLimitChange = (value) => {
+  const handleLimitChange = (value: string) => {
     setLimit(Number(value));
     setPage(1);
   };
 
-  const highlightText = (text) => {
+  const highlightText = (text: string) => {
     if (!search) return text;
 
     const regex = new RegExp(`(${search})`, "gi");
