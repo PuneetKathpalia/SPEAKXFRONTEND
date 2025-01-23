@@ -40,7 +40,7 @@ const SearchWithPagination = () => {
 
   const fetchQuestions = async () => {
     try {
-      const response = await axios.get("http://localhost:5555/api/questions", {
+      const response = await axios.get("https://speakx-backend-6v1c.onrender.com/api/questions", {
         params: { page, limit, search },
       });
       setQuestions(response.data.questions || []);
