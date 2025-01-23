@@ -25,7 +25,7 @@ const SearchWithPagination = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(5);
-  const [isDarkMode, setIsDarkMode] = useState(true); // State for dark mode
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     fetchQuestions();
@@ -89,8 +89,6 @@ const SearchWithPagination = () => {
           {isDarkMode ? "Light Mode" : "Dark Mode"}
         </Button>
       </div>
-
-      {/* Search and Filters */}
       <Card
         className={`p-4 ${
           isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-black"
@@ -131,8 +129,6 @@ const SearchWithPagination = () => {
           </Select>
         </CardContent>
       </Card>
-
-      {/* Table for Data */}
       <Card
         className={`p-4 ${
           isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
